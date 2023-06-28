@@ -20,11 +20,10 @@ class MainViewModel: ObservableObject {
     @Published var appScreen: AppScreen = .intro
 
     var quizzes: [Quiz] = [
-        Quiz(question: "What's the focus you'd like for your walk?", callToAction: "Choose one", options: ["History", "Architecture", "Art", "Food", "Nature", "Culture"]),
-        Quiz(question: "Want an extra touch to your experience?", callToAction: "Choose one", options: ["None", "History", "Architecture", "Art", "Food", "Nature", "Culture"]),
+        Quiz(question: "Choose one of the following themes as the focus for your walking tour.", callToAction: "Select one", options: ["History", "Architecture", "Art", "Food", "Nature", "Culture"]),
+        Quiz(question: "Choose one of the following themes as a secondary focus for your walking tour.", callToAction: "Select one", options: ["None", "History", "Architecture", "Art", "Food", "Nature", "Culture"]),
         Quiz(question: "How long would you like to walk?", callToAction: "Pick a duration", options: ["1 hour", "2 hours", "3 hours", "5 hours", "8 hours"]),
         Quiz(question: "How far do you feel like walking?", callToAction: "Choose a distance", options: ["1/2 mile", "1 mile", "2 miles", "3 miles", "5 miles", "8 miles"]),
-        Quiz(question: "What's your walking distance preference?", callToAction: "Choose one", options: ["1/2 mile", "1 mile", "2 miles", "3 miles", "5 miles", "8 miles"]),
         Quiz(question: "How much moolah are you willing to spend on activities?", callToAction: "Choose one", options: ["No Money", "$10", "$25", "$50", "$100", "No Limit"])
     ]
 
@@ -44,8 +43,11 @@ class MainViewModel: ObservableObject {
         places.compactMap { $0.coordinates }
     }
 
-    init() {
+    private var dataFetchingService: DataFetchingService
+
+    init(dataFetchingService: DataFetchingService) {
         self.answers = Array(repeating: "", count: quizzes.count)
+        self.dataFetchingService = dataFetchingService
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) { [self] in
             self.appScreen = .quiz(quiz: self.quizzes[0], index: 0)
@@ -77,7 +79,14 @@ class MainViewModel: ObservableObject {
 
     private func navigateToTour() {
         self.appScreen = .loading
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+
+        fetchData(answers: answers) { places in
+            guard let places = places else {
+                self.appScreen = .quiz(quiz: self.quizzes[0], index: 0)
+                return
+            }
+
+            self.places = places
             self.appScreen = .tour(place: self.places[0], index: 0)
         }
     }
@@ -86,6 +95,19 @@ class MainViewModel: ObservableObject {
         if index >= 0,
            index < places.count {
             appScreen = .tour(place: places[index], index: index)
+        }
+    }
+    
+    private func fetchData(answers: [String], completion: @escaping (([Place]?)->Void)) {
+        dataFetchingService.fetchData(answers: answers) { response, error in
+            if let response = response {
+                print("Received response: \(response)")
+                // Handle the response as needed
+                completion(response)
+            } else if let error = error {
+                print("HTTP request failed: \(error)")
+                completion(nil)
+            }
         }
     }
 }

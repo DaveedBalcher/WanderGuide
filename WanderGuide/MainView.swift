@@ -9,7 +9,7 @@ import CoreLocation
 import SwiftUI
 
 struct MainView: View {
-    @ObservedObject private var vm = MainViewModel()
+    @ObservedObject private var vm = MainViewModel(dataFetchingService: DataFetchingService())
 
     var body: some View {
         VStack {
