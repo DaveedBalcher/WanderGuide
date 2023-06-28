@@ -19,7 +19,7 @@ enum AppScreen {
 class MainViewModel: ObservableObject {
     @Published var appScreen: AppScreen = .intro
 
-    var quizes: [Quiz] = [
+    var quizzes: [Quiz] = [
         Quiz(question: "What's the focus you'd like for your walk?", callToAction: "Choose one", options: ["History", "Architecture", "Art", "Food", "Nature", "Culture"]),
         Quiz(question: "Want an extra touch to your experience?", callToAction: "Choose one", options: ["None", "History", "Architecture", "Art", "Food", "Nature", "Culture"]),
         Quiz(question: "How long would you like to walk?", callToAction: "Pick a duration", options: ["1 hour", "2 hours", "3 hours", "5 hours", "8 hours"]),
@@ -45,10 +45,10 @@ class MainViewModel: ObservableObject {
     }
 
     init() {
-        self.answers = Array(repeating: "", count: quizes.count)
+        self.answers = Array(repeating: "", count: quizzes.count)
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) { [self] in
-            self.appScreen = .quiz(quiz: self.quizes[0], index: 0)
+            self.appScreen = .quiz(quiz: self.quizzes[0], index: 0)
         }
     }
 
@@ -66,8 +66,8 @@ class MainViewModel: ObservableObject {
 
     private func navigateToNextQuiz(answer: String, index: Int) {
         let currentQuizIndex = index+1
-        if currentQuizIndex < quizes.count {
-            let nextQuiz = quizes[currentQuizIndex]
+        if currentQuizIndex < quizzes.count {
+            let nextQuiz = quizzes[currentQuizIndex]
             nextQuiz.options = nextQuiz.options.filter { $0 !=  answer }
             self.appScreen = .quiz(quiz: nextQuiz, index: currentQuizIndex)
         } else {

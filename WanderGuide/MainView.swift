@@ -23,9 +23,9 @@ struct MainView: View {
                 ProgressView()
                     .progressViewStyle(CircularProgressViewStyle())
             case .quiz(quiz: let quiz, index: let index):
-                QuizView(quiz: quiz) { anwser in
-                    // Update prompt with anwsers
-                    vm.submit(answer: anwser, for: index)
+                QuizView(quiz: quiz) { answer in
+                    // Update prompt with answers
+                    vm.submit(answer: answer, for: index)
                 }
             case .tour(place: let place, index: let index):
                 PlaceView(place: place, tourCoordinates: vm.tourCoordinates, index: index) { swipeDirection in
