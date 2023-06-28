@@ -14,7 +14,7 @@ class Place {
     let categoryName: String
     let storyDescription: String
     let coordinates: CLLocationCoordinate2D?
-    
+
     init(locationTitle: String, categoryName: String, tourDescription: String, storyDescription: String, coordinates: CLLocationCoordinate2D? = nil) {
         self.locationTitle = locationTitle
         self.categoryName = categoryName
@@ -32,15 +32,15 @@ struct PlaceView: View {
     var place: Place
     var tourCoordinates: [CLLocationCoordinate2D]
     var index: Int
-    
+
     private var placeCoordinates: CLLocationCoordinate2D {
         tourCoordinates[index]
     }
-    
+
     @GestureState private var translation: CGFloat = 0
-    
+
     var didSwipeCompletion: ((SwipeDirection) -> Void)
-    
+
     var body: some View {
         ScrollView {
                 HStack {
@@ -53,9 +53,9 @@ struct PlaceView: View {
                                 .padding()
                         }
                     }
-                    
+
                     Spacer()
-                    
+
                     if index < tourCoordinates.count-1 {
                         Button {
                             didSwipeCompletion(.right)
@@ -68,18 +68,18 @@ struct PlaceView: View {
                 }
                 .foregroundColor(.blue)
                 .padding(.bottom, -24)
-            
+
             VStack(alignment: .leading, spacing: 20) {
                 Text(place.locationTitle)
                     .font(.largeTitle)
                     .fontWeight(.bold)
                     .padding()
-                
+
                 Text(place.tourDescription)
                     .font(.headline)
                     .padding(.top, -24)
                     .padding([.leading, .trailing], 16)
-                
+
                 Text(place.categoryName)
                     .font(.subheadline)
                     .fontWeight(.semibold)
@@ -90,11 +90,11 @@ struct PlaceView: View {
                     .padding(.leading, 16)
                     .padding(.top, 8)
                     .padding(.bottom, -20)
-                
+
                 Text(place.storyDescription)
                     .font(.body)
                     .padding([.leading, .top, .trailing], 16)
-                
+
                 ZStack(alignment: .topTrailing) {
                     Map(coordinateRegion: .constant(MKCoordinateRegion(center: placeCoordinates, span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01))), showsUserLocation: true) 
                     .frame(height: 300)
@@ -110,7 +110,7 @@ struct PlaceView: View {
                                 print("Can't use comgooglemaps://")
                             }
                         }
-                        
+
                     }) {
                         Text("Navigate")
                             .font(.subheadline)
@@ -144,28 +144,27 @@ struct PlaceView: View {
         guard startIndex >= 0, startIndex < coordinates.count else {
             return nil
         }
-        
+
         let subCoordinates = Array(coordinates[startIndex..<coordinates.count])
-        
+
         guard let firstCoordinate = subCoordinates.first else {
             return nil
         }
-        
+
         let waypointCoordinates = subCoordinates.dropFirst()
-        
+
         var googleMapsURLString = "comgooglemaps://?saddr=&daddr="
-        
+
         for coordinate in waypointCoordinates {
             googleMapsURLString += "\(coordinate.latitude),\(coordinate.longitude)+to:"
         }
-        
+
         googleMapsURLString += "\(firstCoordinate.latitude),\(firstCoordinate.longitude)"
-        
+
         let googleMapsURL = URL(string: googleMapsURLString)
-        
+
         return googleMapsURL
     }
-
 }
 
 struct PlaceView_Previews: PreviewProvider {

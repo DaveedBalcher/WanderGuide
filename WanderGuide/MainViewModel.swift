@@ -18,15 +18,15 @@ enum AppScreen {
 
 class MainViewModel: ObservableObject {
     @Published var appScreen: AppScreen = .intro
-    
-    var quizes: [Quiz] = [
+
+    var quizzes: [Quiz] = [
         Quiz(question: "Choose one of the following themes as the focus for your walking tour.", callToAction: "Select one", options: ["History", "Architecture", "Art", "Food", "Nature", "Culture"]),
         Quiz(question: "Choose one of the following themes as a secondary focus for your walking tour.", callToAction: "Select one", options: ["None", "History", "Architecture", "Art", "Food", "Nature", "Culture"]),
         Quiz(question: "How long would you like to walk?", callToAction: "Pick a duration", options: ["1 hour", "2 hours", "3 hours", "5 hours", "8 hours"]),
         Quiz(question: "How far do you feel like walking?", callToAction: "Choose a distance", options: ["1/2 mile", "1 mile", "2 miles", "3 miles", "5 miles", "8 miles"]),
         Quiz(question: "How much moolah are you willing to spend on activities?", callToAction: "Choose one", options: ["No Money", "$10", "$25", "$50", "$100", "No Limit"])
     ]
-    
+
     var answers: [String]
 
     var places: [Place] = [
@@ -37,60 +37,60 @@ class MainViewModel: ObservableObject {
         Place(locationTitle: "Husk Restaurant", categoryName: "Restaurant", tourDescription: "For a gastronomical experience, head to Husk, one of Charleston's most renowned restaurants, known for its unique Southern cuisine.", storyDescription: "Housed in a late 19th-century Victorian mansion, Husk is a visual and culinary delight. The building is beautifully restored, featuring intricate woodworking and period-specific architectural details throughout. The restaurant adeptly combines the old-world charm of its architectural surroundings with a modern, southern-inspired menu.", coordinates: CLLocationCoordinate2D(latitude: 32.7680, longitude: -79.9307)),
         Place(locationTitle: "Nathaniel Russell House Museum", categoryName: "Historic House Museum", tourDescription: "Visit this historic house museum for a glimpse into Antebellum life and marvel at the stunning neoclassical architecture.", storyDescription: "The Nathaniel Russell House, built in 1808, is considered one of the finest examples of neoclassical architecture in the United States. It is well-known for its magnificent free-flying staircase that ascends three stories, its gracefully proportioned rooms, and elaborate decorative plasterwork. The house stands as a testament to the wealthy merchant class of Charleston's past.", coordinates: CLLocationCoordinate2D(latitude: 32.7695, longitude: -79.9307)),
         Place(locationTitle: "Kaminsky's Dessert Cafe", categoryName: "Cafe", tourDescription: "End your tour with something sweet from Kaminsky's. This cozy café serves up decadent desserts that are well worth a visit.", storyDescription: "Kaminsky's occupies a charming, rustic building in the bustling Deco District. While it may not be as historically significant as some other buildings, its cozy and warm interiors, along with a vintage-inspired decor, provide a comforting environment that complements its deliciously sweet offerings.", coordinates: CLLocationCoordinate2D(latitude: 32.7908, longitude: -79.9367))
-        ]
-    
+    ]
+
     var tourCoordinates: [CLLocationCoordinate2D] {
         places.compactMap { $0.coordinates }
     }
-    
+
     private var dataFetchingService: DataFetchingService
-    
+
     init(dataFetchingService: DataFetchingService) {
-        self.answers = Array(repeating: "", count: quizes.count)
+        self.answers = Array(repeating: "", count: quizzes.count)
         self.dataFetchingService = dataFetchingService
-        
+
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) { [self] in
-            self.appScreen = .quiz(quiz: self.quizes[0], index: 0)
+            self.appScreen = .quiz(quiz: self.quizzes[0], index: 0)
         }
     }
-    
+
     func submit(answer: String, for index: Int) {
         addAnswer(answer: answer, for: index)
-        
+
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [self] in
             navigateToNextQuiz(answer: answer, index: index)
         }
     }
-    
+
     private func addAnswer(answer: String, for index: Int) {
         answers[index] = answer
     }
-    
+
     private func navigateToNextQuiz(answer: String, index: Int) {
         let currentQuizIndex = index+1
-        if currentQuizIndex < quizes.count {
-            let nextQuiz = quizes[currentQuizIndex]
+        if currentQuizIndex < quizzes.count {
+            let nextQuiz = quizzes[currentQuizIndex]
             nextQuiz.options = nextQuiz.options.filter { $0 !=  answer }
             self.appScreen = .quiz(quiz: nextQuiz, index: currentQuizIndex)
         } else {
             navigateToTour()
         }
     }
-    
+
     private func navigateToTour() {
         self.appScreen = .loading
-        
+
         fetchData(answers: answers) { places in
             guard let places = places else {
-                self.appScreen = .quiz(quiz: self.quizes[0], index: 0)
+                self.appScreen = .quiz(quiz: self.quizzes[0], index: 0)
                 return
             }
-            
+
             self.places = places
             self.appScreen = .tour(place: self.places[0], index: 0)
         }
     }
-    
+
     func navigateTo(placeIndex index: Int) {
         if index >= 0,
            index < places.count {
@@ -99,15 +99,15 @@ class MainViewModel: ObservableObject {
     }
     
     private func fetchData(answers: [String], completion: @escaping (([Place]?)->Void)) {
-            dataFetchingService.fetchData(answers: answers) { response, error in
-                if let response = response {
-                    print("Received response: \(response)")
-                    // Handle the response as needed
-                    completion(response)
-                } else if let error = error {
-                    print("HTTP request failed: \(error)")
-                    completion(nil)
-                }
+        dataFetchingService.fetchData(answers: answers) { response, error in
+            if let response = response {
+                print("Received response: \(response)")
+                // Handle the response as needed
+                completion(response)
+            } else if let error = error {
+                print("HTTP request failed: \(error)")
+                completion(nil)
             }
         }
+    }
 }
