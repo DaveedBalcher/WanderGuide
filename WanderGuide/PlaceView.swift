@@ -66,7 +66,7 @@ struct PlaceView: View {
                         }
                     }
                 }
-                .foregroundColor(.gray)
+                .foregroundColor(.blue)
                 .padding(.bottom, -24)
             
             VStack(alignment: .leading, spacing: 20) {

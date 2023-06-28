@@ -17,6 +17,7 @@
 		174D46802A43CC5000A7C0BB /* PlaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 174D467F2A43CC5000A7C0BB /* PlaceView.swift */; };
 		174D46832A45CFDB00A7C0BB /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 174D46822A45CFDB00A7C0BB /* MainView.swift */; };
 		174D46872A4892C700A7C0BB /* MainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 174D46862A4892C700A7C0BB /* MainViewModel.swift */; };
+		174D46892A4A64DD00A7C0BB /* DataFetchingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 174D46882A4A64DD00A7C0BB /* DataFetchingService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +52,7 @@
 		174D46812A44E75F00A7C0BB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		174D46822A45CFDB00A7C0BB /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		174D46862A4892C700A7C0BB /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
+		174D46882A4A64DD00A7C0BB /* DataFetchingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataFetchingService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -104,6 +106,7 @@
 				174D46812A44E75F00A7C0BB /* Info.plist */,
 				174D46552A43C68000A7C0BB /* WanderGuideApp.swift */,
 				174D46862A4892C700A7C0BB /* MainViewModel.swift */,
+				174D46882A4A64DD00A7C0BB /* DataFetchingService.swift */,
 				174D46822A45CFDB00A7C0BB /* MainView.swift */,
 				174D46572A43C68000A7C0BB /* QuizView.swift */,
 				174D467F2A43CC5000A7C0BB /* PlaceView.swift */,
@@ -269,6 +272,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				174D46872A4892C700A7C0BB /* MainViewModel.swift in Sources */,
+				174D46892A4A64DD00A7C0BB /* DataFetchingService.swift in Sources */,
 				174D46802A43CC5000A7C0BB /* PlaceView.swift in Sources */,
 				174D46832A45CFDB00A7C0BB /* MainView.swift in Sources */,
 				174D46582A43C68000A7C0BB /* QuizView.swift in Sources */,
@@ -298,6 +302,7 @@
 /* Begin PBXTargetDependency section */
 		174D46642A43C68000A7C0BB /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
+			platformFilter = ios;
 			target = 174D46512A43C68000A7C0BB /* WanderGuide */;
 			targetProxy = 174D46632A43C68000A7C0BB /* PBXContainerItemProxy */;
 		};
@@ -429,7 +434,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_ASSET_PATHS = "\"WanderGuide/Preview Content\"";
 				DEVELOPMENT_TEAM = W5SMVQ4M6D;
 				ENABLE_PREVIEWS = YES;
@@ -465,7 +470,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_ASSET_PATHS = "\"WanderGuide/Preview Content\"";
 				DEVELOPMENT_TEAM = W5SMVQ4M6D;
 				ENABLE_PREVIEWS = YES;
@@ -508,6 +513,9 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = DaveedBalcher.WanderGuideTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = YES;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -528,6 +536,9 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = DaveedBalcher.WanderGuideTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = YES;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
