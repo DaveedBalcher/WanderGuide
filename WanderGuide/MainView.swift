@@ -10,7 +10,7 @@ import SwiftUI
 
 struct MainView: View {
     @ObservedObject private var vm = MainViewModel()
-    
+
     var body: some View {
         VStack {
             switch vm.appScreen {

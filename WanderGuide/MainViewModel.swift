@@ -18,7 +18,7 @@ enum AppScreen {
 
 class MainViewModel: ObservableObject {
     @Published var appScreen: AppScreen = .intro
-    
+
     var quizes: [Quiz] = [
         Quiz(question: "What's the focus you'd like for your walk?", callToAction: "Choose one", options: ["History", "Architecture", "Art", "Food", "Nature", "Culture"]),
         Quiz(question: "Want an extra touch to your experience?", callToAction: "Choose one", options: ["None", "History", "Architecture", "Art", "Food", "Nature", "Culture"]),
@@ -27,7 +27,7 @@ class MainViewModel: ObservableObject {
         Quiz(question: "What's your walking distance preference?", callToAction: "Choose one", options: ["1/2 mile", "1 mile", "2 miles", "3 miles", "5 miles", "8 miles"]),
         Quiz(question: "How much moolah are you willing to spend on activities?", callToAction: "Choose one", options: ["No Money", "$10", "$25", "$50", "$100", "No Limit"])
     ]
-    
+
     var answers: [String]
 
     var places: [Place] = [
@@ -38,32 +38,32 @@ class MainViewModel: ObservableObject {
         Place(locationTitle: "Husk Restaurant", categoryName: "Restaurant", tourDescription: "For a gastronomical experience, head to Husk, one of Charleston's most renowned restaurants, known for its unique Southern cuisine.", storyDescription: "Housed in a late 19th-century Victorian mansion, Husk is a visual and culinary delight. The building is beautifully restored, featuring intricate woodworking and period-specific architectural details throughout. The restaurant adeptly combines the old-world charm of its architectural surroundings with a modern, southern-inspired menu.", coordinates: CLLocationCoordinate2D(latitude: 32.7680, longitude: -79.9307)),
         Place(locationTitle: "Nathaniel Russell House Museum", categoryName: "Historic House Museum", tourDescription: "Visit this historic house museum for a glimpse into Antebellum life and marvel at the stunning neoclassical architecture.", storyDescription: "The Nathaniel Russell House, built in 1808, is considered one of the finest examples of neoclassical architecture in the United States. It is well-known for its magnificent free-flying staircase that ascends three stories, its gracefully proportioned rooms, and elaborate decorative plasterwork. The house stands as a testament to the wealthy merchant class of Charleston's past.", coordinates: CLLocationCoordinate2D(latitude: 32.7695, longitude: -79.9307)),
         Place(locationTitle: "Kaminsky's Dessert Cafe", categoryName: "Cafe", tourDescription: "End your tour with something sweet from Kaminsky's. This cozy café serves up decadent desserts that are well worth a visit.", storyDescription: "Kaminsky's occupies a charming, rustic building in the bustling Deco District. While it may not be as historically significant as some other buildings, its cozy and warm interiors, along with a vintage-inspired decor, provide a comforting environment that complements its deliciously sweet offerings.", coordinates: CLLocationCoordinate2D(latitude: 32.7908, longitude: -79.9367))
-        ]
-    
+    ]
+
     var tourCoordinates: [CLLocationCoordinate2D] {
         places.compactMap { $0.coordinates }
     }
-    
+
     init() {
         self.answers = Array(repeating: "", count: quizes.count)
-        
+
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) { [self] in
             self.appScreen = .quiz(quiz: self.quizes[0], index: 0)
         }
     }
-    
+
     func submit(answer: String, for index: Int) {
         addAnswer(answer: answer, for: index)
-        
+
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [self] in
             navigateToNextQuiz(answer: answer, index: index)
         }
     }
-    
+
     private func addAnswer(answer: String, for index: Int) {
         answers[index] = answer
     }
-    
+
     private func navigateToNextQuiz(answer: String, index: Int) {
         let currentQuizIndex = index+1
         if currentQuizIndex < quizes.count {
@@ -74,14 +74,14 @@ class MainViewModel: ObservableObject {
             navigateToTour()
         }
     }
-    
+
     private func navigateToTour() {
         self.appScreen = .loading
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
             self.appScreen = .tour(place: self.places[0], index: 0)
         }
     }
-    
+
     func navigateTo(placeIndex index: Int) {
         if index >= 0,
            index < places.count {
