@@ -165,7 +165,6 @@ struct PlaceView: View {
 
         return googleMapsURL
     }
-
 }
 
 struct PlaceView_Previews: PreviewProvider {
